@@ -1,0 +1,508 @@
+local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
+local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
+
+local Window = Fluent:CreateWindow({
+    Title = "Exploit Hub - Premium 2.9.4",
+    SubTitle = "by fsploit",
+    TabWidth = 175,
+    Size = UDim2.fromOffset(450, 225),
+    Acrylic = false, -- The blur may be detectable, setting this to false disables blur entirely
+    Theme = "Dark",
+    MinimizeKey = Enum.KeyCode.RightControl -- Used when theres no MinimizeKeybind
+})
+
+local Tabs = {
+    Main = Window:AddTab({ Title = "Parry", Icon = "shield" }),
+    Misc = Window:AddTab({ Title = "Misc", Icon = "Settings" }),
+    Credits = Window:AddTab({ Title = "Credits", Icon = "copyright" })
+}
+
+local Options = Fluent.Options
+
+--functions
+function Manual()
+local toggleState = false
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.ResetOnSpawn = false
+ScreenGui.Name = "Button"
+
+local button = Instance.new("TextButton")
+button.Text = "Manual Parry"
+button.BackgroundTransparency = 0
+button.BackgroundColor3 = Color3.new(1, 1, 1)
+button.Size = UDim2.new(0, 150, 0, 70)
+button.Parent = ScreenGui
+button.Position = UDim2.new(0, 100, 0, 100)
+
+local topBar = Instance.new("Frame")
+topBar.Size = UDim2.new(1, 0, 0, 15)
+topBar.BackgroundColor3 = Color3.new(0, 0, 0)
+topBar.Parent = button
+
+local originalColor = button.BackgroundColor3
+local grayColor = Color3.new(0.7, 0.7, 0.7)
+
+local dragging = false
+local offset = Vector2.new()
+local player = game.Players.LocalPlayer
+
+topBar.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = true
+        offset = button.Position - UDim2.new(0, input.Position.X, 0, input.Position.Y)
+        button.BackgroundColor3 = grayColor
+    end
+end)
+
+topBar.InputChanged:Connect(function(input)
+    if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+        local inputPosition = input.Position
+        local newPosition = UDim2.new(0, inputPosition.X, 0, inputPosition.Y) + offset
+        button.Position = newPosition
+    end
+end)
+
+topBar.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = false
+        button.BackgroundColor3 = originalColor
+    end
+end)
+
+button.MouseButton1Click:Connect(function()
+    toggleState = not toggleState
+    button.Text = tostring(toggleState)
+    getgenv().Spam = toggleState
+    while getgenv().Spam do
+game.ReplicatedStorage.Remotes.ParryButtonPress:Fire()
+        wait(0.01)
+    end
+end)
+
+ScreenGui.Parent = player:FindFirstChild("PlayerGui")
+end
+
+        end
+end)
+ 
+local Balls = Workspace:FindFirstChild("Balls")
+function IsReal()
+    local Re
+    for i,v in next, Balls:GetChildren() do
+        if v:GetAttribute("realBall") and v:GetAttribute("target") == Player.Name then
+            Re = v
+        end
+    end
+    return Re
+end
+function Baller()
+    local Real = nil
+    for i,v in next, Balls:GetChildren() do
+        if v:GetAttribute("realBall") then
+            Real = v
+        end
+    end
+    return Real
+end
+local RunService = game:GetService("RunService")
+RunService.Stepped:Connect(function()
+        local LocalPlr = Players.LocalPlayer
+        local BallLook = Baller()
+        if not BallLook then return end
+        if LookAt and LookAtMethod == "Player CFrame" then
+LocalPlr.Character.HumanoidRootPart.CFrame = CFrame.new(LocalPlr.Character.HumanoidRootPart.Position, Vector3.new(BallLook.Position.X, LocalPlr.Character.HumanoidRootPart.Position.Y, BallLook.Position.Z))
+elseif LookAt and LookAtMethod == "Camera CFrame" then
+        workspace.CurrentCamera.CFrame = CFrame.lookAt(Workspace.CurrentCamera.CFrame.Position, BallLook.CFrame.Position)
+        end 
+end)
+if LookAt == true then
+        game.Players.LocalPlayer.Character.Humanoid.AutoRotate = false
+else 
+        game.Players.LocalPlayer.Character.Humanoid.AutoRotate = true
+end
+local Randomize = false
+RunService.Stepped:Connect(function()
+        if Randomize then
+                DistanceToHit = math.random(10, 14)
+        end
+end)
+
+function SwordCrateManual()
+game:GetService("ReplicatedStorage").Remote.RemoteFunction:InvokeServer("PromptPurchaseCrate", workspace.Spawn.Crates.NormalSwordCrate)
+end
+
+function ExplosionCrateManual()
+game:GetService("ReplicatedStorage").Remote.RemoteFunction:InvokeServer("PromptPurchaseCrate", workspace.Spawn.Crates.NormalExplosionCrate)
+end
+
+function SwordCrateAuto()
+while _G.AutoSword do
+game:GetService("ReplicatedStorage").Remote.RemoteFunction:InvokeServer("PromptPurchaseCrate", workspace.Spawn.Crates.NormalSwordCrate)
+wait(1)
+end
+end
+
+function ExplosionCrateAuto()
+while _G.AutoBoom do
+game:GetService("ReplicatedStorage").Remote.RemoteFunction:InvokeServer("PromptPurchaseCrate", workspace.Spawn.Crates.NormalExplosionCrate)
+wait(1)
+end
+end
+
+--start
+do
+    Fluent:Notify({
+        Title = "Exploit X Hub has injected",
+        Content = "report any bugs at https://dsc.gg/exploitx",
+        SubContent = "or copy the link trough the 'Misc' page", -- Optional
+        Duration = 3.5 -- Set to nil to make the notification not disappear
+    })
+end
+
+--start, the real one
+local Mainy = Tabs.Main:AddSection("Parry")
+
+Mainy:AddParagraph({
+        Title = "Made by Fsploit",
+        Content = "We are better than Bedol hub :3"
+    })
+
+local Mainy = Tabs.Main:AddToggle("AutoParry",{Title = "Auto Parry (DISTANCE BASED)",Default = false })
+AutoParry:OnChanged(function()
+        Paws = Options.AutoParry.Value
+        if CanHit == true and Paws then
+                Fluent:Notify({
+                    Title = "[WARNING]",
+                    Content = "Both Auto Parry Toggled On Detected. Please Do Not Toggle Both Auto Parry Types True On The Same Time! Or Else You'll Bug!",
+                    Duration = 10
+                })
+        end
+end)
+ 
+local Mainy = Tabs.Main:AddToggle("AutoParry2",{Title = "Auto Parry (PING BASED)",Default = false })
+AutoParry2:OnChanged(function()
+        CanHit = Options.AutoParry2.Value
+        if Paws == true and CanHit then
+                Fluent:Notify({
+                    Title = "[WARNING]",
+                    Content = "Both Auto Parry Toggled On Detected. Please Do Not Toggle Both Auto Parry Types True On The Same Time! Or Else You'll Bug!",
+                    Duration = 10
+                })
+        end
+end)
+
+Mainy:AddButton({
+        Title = "Ping Based Parry",
+        Description = "i guarantee this auto parry is better.",
+        Callback = function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/k00pz/Combat-lollll/main/Vynixie-Combat-Hub", true))()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/k00pz/Spam-detector/main/yooo%20ez%20detection", true))()
+        end
+    })
+
+Mainy:AddButton({
+        Title = "Auto spam",
+        Description = "launches an auto spam .",
+        Callback = function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/k00pz/Spam-detector/main/yooo%20ez%20detection", true))()
+        end
+    })
+
+Mainy:AddButton({
+        Title = "Manual Spam Parry GUI",
+        Description = "with a toggle that will be easier to turn on/off during combat",
+        Callback = function()
+            Manual()
+        end
+    })
+    
+local Toggle = Mainy:AddToggle("Hold F/M2", {Title = "Hold Parry button for spam", Default = false })
+Toggle:OnChanged(function(Value)
+  getgenv().exeSpam = Value
+     if getgenv().exeSpam then
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Hosvile/Refinement/main/MC%3ABlade%20Ball%20Spam",true))()
+        end
+end)
+
+local Toggle = Mainy:AddToggle("Freeze Spammy", {Title = "Freeze Ability Spammer", Default = false })
+Toggle:OnChanged(function(Value)
+  local UserInputService = game:GetService("UserInputService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local sus = Value
+
+local function Freezer()
+    if sus then
+        print("Freeze Spammer is enabled | Exploit X")
+        while sus do
+            game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Freeze"):FireServer()
+            wait()
+        end
+    else
+        print("Freeze Spammer is disabled | Exploit X")
+    end
+end
+
+game:GetService("UserInputService").InputBegan:Connect(function(input, gameProcessed)
+    if not gameProcessed and input.KeyCode == Enum.KeyCode.B then
+        Freezer()
+    end
+end)
+end)
+
+local Money = Tabs.Main:AddSection("Features")
+
+Money:AddButton({
+        Title = "remove particles",
+        Description = "execute this for less lag",
+        Callback = function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hosvile/Refinement/main/Destroy%20Particle%20Emitters",true))()
+        end
+    })
+
+Money:AddButton({
+        Title = "Fps Boost Heavy",
+        Description = "Reduces Graphics Alot To Reduce Lag And Increase Fps Alot",
+        Callback = function()
+                local decalsyeeted = true
+local g = game
+local w = g.Workspace
+local l = g.Lighting
+local t = w.Terrain
+t.WaterWaveSize = 0
+t.WaterWaveSpeed = 0
+t.WaterReflectance = 0
+t.WaterTransparency = 0
+l.GlobalShadows = false
+l.FogEnd = 9e9
+l.Brightness = 0
+settings().Rendering.QualityLevel = "Level01"
+for i, v in pairs(g:GetDescendants()) do
+    if v:IsA("Part") or v:IsA("Union") or v:IsA("CornerWedgePart") or v:IsA("TrussPart") then
+        v.Material = "Plastic"
+        v.Reflectance = 0
+    elseif v:IsA("Decal") or v:IsA("Texture") and decalsyeeted then
+        v.Transparency = 1
+    elseif v:IsA("ParticleEmitter") or v:IsA("Trail") then
+        v.Lifetime = NumberRange.new(0)
+    elseif v:IsA("Explosion") then
+        v.BlastPressure = 1
+        v.BlastRadius = 1
+    elseif v:IsA("Fire") or v:IsA("SpotLight") or v:IsA("Smoke") or v:IsA("Sparkles") then
+        v.Enabled = false
+    elseif v:IsA("MeshPart") then
+        v.Material = "Plastic"
+        v.Reflectance = 0
+        v.TextureID = 10385902758728957
+    end
+end
+for i, e in pairs(l:GetChildren()) do
+    if e:IsA("BlurEffect") or e:IsA("SunRaysEffect") or e:IsA("ColorCorrectionEffect") or e:IsA("BloomEffect") or e:IsA("DepthOfFieldEffect") then
+        e.Enabled = false
+    end
+end
+end})
+Money:AddButton({
+        Title = "Fps Boost Lite",
+        Description = "Reduces Some Graphics To Reduce Lag And Increase Fps Slightly",
+        Callback = function()
+local decalsyeeted = false
+local g = game
+local w = g.Workspace
+local l = g.Lighting
+local t = w.Terrain
+t.WaterWaveSize = 0
+t.WaterWaveSpeed = 0
+t.WaterReflectance = 0
+t.WaterTransparency = 0
+l.GlobalShadows = false
+l.FogEnd = 9e9
+l.Brightness = 0
+settings().Rendering.QualityLevel = "Level01"
+for i, v in pairs(g:GetDescendants()) do
+    if v:IsA("Part") or v:IsA("Union") or v:IsA("CornerWedgePart") or v:IsA("TrussPart") then
+        v.Material = "Plastic"
+        v.Reflectance = 0
+    elseif v:IsA("Decal") or v:IsA("Texture") and decalsyeeted then
+        v.Transparency = 1
+    elseif v:IsA("ParticleEmitter") or v:IsA("Trail") then
+        v.Lifetime = NumberRange.new(0)
+    elseif v:IsA("Explosion") then
+        v.BlastPressure = 1
+        v.BlastRadius = 1
+    elseif v:IsA("Fire") or v:IsA("SpotLight") or v:IsA("Smoke") or v:IsA("Sparkles") then
+        v.Enabled = false
+    elseif v:IsA("MeshPart") then
+        v.Material = "Plastic"
+        v.Reflectance = 0
+        v.TextureID = 10385902758728957
+    end
+end
+for i, e in pairs(l:GetChildren()) do
+    if e:IsA("BlurEffect") or e:IsA("SunRaysEffect") or e:IsA("ColorCorrectionEffect") or e:IsA("BloomEffect") or e:IsA("DepthOfFieldEffect") then
+        e.Enabled = false
+    end
+end
+ 
+ 
+end})
+
+Money:AddButton({
+        Title = "Open Sword Crate",
+        Description = "will open one common sword crate",
+        Callback = function()
+            SwordCrateManual()
+        end
+    })
+    
+Money:AddButton({
+        Title = "Open Explosion Crate",
+        Description = "will open one common explosion crate",
+        Callback = function()
+            ExplosionCrateManual()
+        end
+    })
+    
+local Toggle = Money:AddToggle("SwordAuto", {Title = "Auto Open Sword Crate", Default = false })
+Toggle:OnChanged(function(Value)
+_G.AutoSword = Value
+        SwordCrateAuto()
+end)
+
+local Toggle = Money:AddToggle("ExplosionAuto", {Title = "Auto Open Explosion Crate", Default = false })
+Toggle:OnChanged(function(Value)
+_G.AutoBoom = Value
+        ExplosionCrateAuto()
+end)
+
+--misc
+local Misc = Tabs.Misc:AddSection("Misc")
+
+Tabs.Adj:AddParagraph({
+        Title = "Adjustments (For Distance Based)",
+        Content = "You Can Change Stuff Here To Your Liking. This Is For The Auto Parry Distance Based, Anything Applied In Ping Based Adjustments Wont Be Applied Here. "
+})
+local HitSlider = Misc:AddSlider("DistanceHit", {
+        Title = "Distance To Hit",
+        Description = "The Distance Of The Ball Auto Parry Activates Putting It In High Numbers Is Not Advised.",
+        Default = 10,
+        Min = 5.5,
+        Max = 20,
+        Rounding = 1,
+        Callback = function(Value)
+        end
+})
+    HitSlider:OnChanged(function(Value)
+            DistanceToHit = tonumber(Value)
+end)
+local Random = Misc:AddToggle("Random",{Title = "Radomize Distance To Hit",Default = false })
+Random:OnChanged(function()
+        Randomize = Options.Random.Value
+end)
+ 
+Misc:AddParagraph({
+        Title = "Adjustments (For Ping Based)",
+        Content = "You Can Change Stuff Here To Your Liking. This Is For The Auto Parry Ping Based, Anything Adjusted In DIstance Based Adjustments Wont Be Applied Here."
+})
+local HitSlider2 = Misc:AddSlider("OffSetHit", {
+        Title = "Distance Offset",
+        Description = "It Kinda Acts Like Distance To Hit But Now Its An Offset Because The Main Distance To Hit Is Already Handled By The Ping Math.",
+        Default = 3.7,
+        Min = 2.5,
+        Max = 4.5,
+        Rounding = 1,
+        Callback = function(Value)
+        end
+})
+    HitSlider2:OnChanged(function(Value)
+           shared.config.adjustment  = tonumber(Value)
+end)
+local HitSlider3 = Misc:AddSlider("HitRange", {
+        Title = "Hit Range",
+        Description = "Self Explanatory.",
+        Default = 0.6,
+        Min = 0.3,
+        Max = 1,
+        Rounding = 1,
+        Callback = function(Value)
+        end
+})
+    HitSlider3:OnChanged(function(Value)
+           shared.config.hit_range  = tonumber(Value)
+end)
+
+Misc:AddParagraph({
+        Title = "Adjustments (For Both)",
+        Content = "You Can Change Stuff Here To Your Liking. This Is For Both Distance And Ping Based Parry, Anything Adjusted Here Will Apply For Both."
+})
+local MethodP = Tabs.Adj:AddDropdown("MethodParry", {
+        Title = "Auto Parry Method",
+        Values = {"Remote","Function","Key Press"},
+        Multi = false,
+        Default = "Remote",
+    })
+    MethodP:OnChanged(function(Value)
+            DeflectionMethod = Value
+end)
+local MethodD = Tabs.Adj:AddDropdown("MethodDetect", {
+        Title = "Detection Method",
+        Values = {"Player Highlight","Ball Highlight","Ball Target"},
+        Multi = false,
+        Default = "Player Highlight",
+    })
+    MethodD:OnChanged(function(Value)
+            MethodToDetect = Value
+end)
+Misc:AddParagraph({
+        Title = "Adjustments (For Others)",
+        Content = "Misc Adjustments"
+})
+local MethodL = Tabs.Adj:AddDropdown("LookMethod", {
+        Title = "Look At Ball Method",
+        Values = {"Player CFrame", "Camera CFrame"},
+        Multi = false,
+        Default = "Player CFrame",
+    })
+    MethodL:OnChanged(function(Value)
+            LookAtMethod = Value
+end)
+ 
+
+--credits
+local Credits = Tabs.Credits:AddSection("Credits")
+
+Credits:AddParagraph({
+        Title = "Credits",
+        Content = "Script was made by Exploit X Development TeamÃ‚Â©.\nAll Rights Reserved"
+    })
+
+Credits:AddParagraph({
+        Title = "Fsploit",
+        Content = "Made by Fsploit or @btxander07 on discord :3"
+    })
+
+Credits:AddButton({
+        Title = "Copy youtube Link",
+        Description = "https://m.youtube.com/channel/UCV1CTzkwO46A70taai-rFyQ",
+        Callback = function()
+            setclipboard("https://m.youtube.com/channel/UCV1CTzkwO46A70taai-rFyQ")
+        end
+    })
+
+Credits:AddButton({
+        Title = "Copy Discord Link",
+        Description = "discord.gg/exploitx",
+        Callback = function()
+            setclipboard("https://discord.com/invite/exploitx")
+        end
+    })
+    
+local Showcase = Tabs.Credits:AddSection("Awesome Showcasers")
+
+Showcase:AddParagraph({
+        Title = "Youtubers",
+        Content = "HYxDEATH"
+    })
+    
+    print("Exploit X Hub  | Property of exploit x Development TeamÃ‚Â©")
